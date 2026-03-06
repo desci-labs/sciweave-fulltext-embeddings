@@ -1,0 +1,79 @@
+{
+  "run_at": "2026-03-06T14:38:55.705681+00:00",
+  "collection_name": "works_fulltext_embeddings",
+  "collection_points": 333,
+  "retrieval": {
+    "recall_at_1": 0.75,
+    "recall_at_5": 1.0,
+    "recall_at_10": 1.0,
+    "mrr": 0.84,
+    "total_queries": 12,
+    "found_count": 12,
+    "by_query_type": {
+      "abstract_sentence": {
+        "total": 4,
+        "recall_at_1": 0.75,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.833
+      },
+      "method_phrase": {
+        "total": 4,
+        "recall_at_1": 0.75,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.875
+      },
+      "title": {
+        "total": 4,
+        "recall_at_1": 0.75,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.812
+      }
+    }
+  },
+  "compare": {
+    "total_queries": 12,
+    "k": 10,
+    "fulltext_recall_at_k": 1.0,
+    "abstract_recall_at_k": 0.083,
+    "fulltext_wins": 11,
+    "abstract_wins": 0,
+    "both_found": 1,
+    "neither_found": 0,
+    "embedding_model_note": "Same dimension (384) - direct comparison valid"
+  },
+  "intrinsic": {
+    "total_papers": 4,
+    "total_chunks": 80,
+    "avg_chunk_length": 823.8,
+    "median_chunk_length": 888.0,
+    "p5_chunk_length": 142.0,
+    "p95_chunk_length": 996.0,
+    "intra_paper_similarity": 0.753,
+    "inter_paper_similarity": 0.678,
+    "separation_ratio": 1.111,
+    "section_type_clustering": {
+      "abstract": 0.717,
+      "body_section": 0.692,
+      "conclusion": 0.73,
+      "introduction": 0.763,
+      "methods": 0.762,
+      "references": 0.629,
+      "results": 0.792,
+      "title": 0.795
+    },
+    "chunk_length_by_section_type": {
+      "abstract": 702.5,
+      "appendix": 988.0,
+      "body_section": 780.1,
+      "conclusion": 662.2,
+      "introduction": 863.8,
+      "methods": 564.5,
+      "references": 3146.0,
+      "results": 900.0,
+      "title": 46.5
+    }
+  }
+}

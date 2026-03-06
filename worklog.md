@@ -50,3 +50,15 @@
 - Removed `version: "3.8"` from docker-compose (deprecated)
 - **Replaced HybridChunker with SectionChunker** (sentence-split only): LLM semantic chunking was too slow (~1-2 min/section) and unreliable (JSON parse failures, NoneType errors). Sentence splitting is fast and sufficient for V0-Alpha.
 - Smoke test result: 4/10 papers processed end-to-end in ~2 min (126 sections → 333 chunks embedded in Qdrant)
+
+### Embedding Evaluation Script
+- `scripts/evaluate_embeddings.py` - Comprehensive embedding evaluation with 3 subcommands:
+  - `retrieval` - Auto-generates queries from indexed data (title, abstract sentence, method phrase, result phrase), measures Recall@1/5/10 and MRR with per-query-type breakdown
+  - `compare` - Head-to-head fulltext vs abstract-only collection (remote Azure Qdrant), gracefully handles dim mismatch
+  - `intrinsic` - Intra/inter-paper cosine similarity, separation ratio, section-type clustering, chunk length stats
+  - `all` - Runs all three
+- Smoke test results (4 papers, 333 chunks):
+  - Retrieval: R@1=0.75, R@10=1.0, MRR=0.84
+  - Fulltext vs Abstract: fulltext wins 11/12 queries (1.0 vs 0.083 recall)
+  - Intrinsic: intra-paper sim=0.753, inter-paper sim=0.678, separation ratio=1.11 (low but expected with 4 similar CS papers)
+- Saved plan to `.claude-plans/embedding-evaluation.md`
