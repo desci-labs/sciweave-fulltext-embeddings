@@ -25,3 +25,9 @@
 - `pipeline/embedder.py` - BGEEmbedder class: BAAI/bge-small-en-v1.5 via fastembed, batch embedding, single query embedding
 - `pipeline/storage.py` - QdrantStorage class: collection creation with HNSW config and payload indexes, paper upsert with UUID5 point IDs, paper deletion, collection info
 - `pipeline/state.py` - PipelineState class: SQLite checkpointing with stages (discovered→downloaded→extracted→chunked→embedded), batch operations, run tracking, stats
+
+### Phase 3: Orchestrator + CLI
+- `pipeline/orchestrator.py` - PipelineOrchestrator: coordinates discovery→download→extract→chunk→embed→store in streaming batches. Supports `run()` for fresh start and `resume()` for checkpoint recovery. Cleans up PDFs after processing by default. Tracks per-batch stats and chunker method distribution.
+- `scripts/run_pipeline.py` - CLI entry point with args: `--max-papers` (default 100K), `--batch-size`, `--pdf-dir`, `--state-db`, `--resume`, `--no-cleanup`, `--log-level`, `--embedding-device`
+- `scripts/check_progress.py` - Print pipeline progress stats from SQLite
+- Added `python-dotenv` to requirements.txt
