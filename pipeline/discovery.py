@@ -50,8 +50,8 @@ class PaperDiscovery:
                     {"term": {"language": language}},
                 ],
                 "should": [
-                    {"exists": {"field": "best_locations.pdf_url"}},
-                    {"exists": {"field": "locations.pdf_url"}},
+                    {"nested": {"path": "best_locations", "query": {"exists": {"field": "best_locations.pdf_url"}}}},
+                    {"nested": {"path": "locations", "query": {"exists": {"field": "locations.pdf_url"}}}},
                 ],
                 "minimum_should_match": 1,
             }

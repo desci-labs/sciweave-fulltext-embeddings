@@ -16,7 +16,7 @@ from pipeline.orchestrator import PipelineOrchestrator
 from pipeline.discovery import PaperDiscovery
 from pipeline.downloader import PDFDownloader
 from pipeline.extractor import GROBIDExtractor
-from pipeline.chunker import HybridChunker
+from pipeline.chunker import SectionChunker
 from pipeline.embedder import BGEEmbedder
 from pipeline.storage import QdrantStorage
 from pipeline.state import PipelineState
@@ -83,7 +83,7 @@ def main():
         discovery=PaperDiscovery(batch_size=args.batch_size),
         downloader=PDFDownloader(output_dir=args.pdf_dir),
         extractor=GROBIDExtractor(),
-        chunker=HybridChunker(),
+        chunker=SectionChunker(),
         embedder=BGEEmbedder(),
         storage=QdrantStorage(),
         state=PipelineState(db_path=args.state_db),

@@ -40,3 +40,13 @@
 
 ### Phase 5: Docker Compose
 - `docker-compose.yml` - GROBID (lfoppiano/grobid:0.8.1 on port 8070, 8GB memory) + Qdrant (v1.12.6 on ports 6333/6334, persistent volume, 4GB memory)
+
+### Bugfixes & Tuning
+- Fixed ES index name: `works_opt` → `works_open_05_07` (5.15M matching papers)
+- Pinned `elasticsearch==8.17.0` (server rejects v9 client headers)
+- Fixed nested field queries: `locations`/`best_locations` are nested in ES, wrapped `exists` in `nested` query
+- Fixed Qdrant storage path: bind mount to `/Volumes/Kandoz/` instead of Docker named volume (was running out of disk)
+- Added `check_compatibility=False` to QdrantClient (client v1.15 vs server v1.12)
+- Removed `version: "3.8"` from docker-compose (deprecated)
+- **Replaced HybridChunker with SectionChunker** (sentence-split only): LLM semantic chunking was too slow (~1-2 min/section) and unreliable (JSON parse failures, NoneType errors). Sentence splitting is fast and sufficient for V0-Alpha.
+- Smoke test result: 4/10 papers processed end-to-end in ~2 min (126 sections → 333 chunks embedded in Qdrant)

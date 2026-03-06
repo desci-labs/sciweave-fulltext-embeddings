@@ -32,7 +32,7 @@ class QdrantStorage:
         self.collection_name = collection_name or os.getenv(
             "QDRANT_COLLECTION", "works_fulltext_embeddings"
         )
-        self.client = QdrantClient(url=self.qdrant_url)
+        self.client = QdrantClient(url=self.qdrant_url, check_compatibility=False)
 
     def ensure_collection(self):
         """Create collection if it doesn't exist."""

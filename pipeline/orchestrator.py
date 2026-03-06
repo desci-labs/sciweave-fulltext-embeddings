@@ -8,7 +8,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 from pipeline import PaperMetadata
-from pipeline.chunker import HybridChunker
+from pipeline.chunker import SectionChunker
 from pipeline.discovery import PaperDiscovery
 from pipeline.downloader import PDFDownloader
 from pipeline.embedder import BGEEmbedder
@@ -27,7 +27,7 @@ class PipelineOrchestrator:
         discovery: PaperDiscovery = None,
         downloader: PDFDownloader = None,
         extractor: GROBIDExtractor = None,
-        chunker: HybridChunker = None,
+        chunker: SectionChunker = None,
         embedder: BGEEmbedder = None,
         storage: QdrantStorage = None,
         state: PipelineState = None,
@@ -37,7 +37,7 @@ class PipelineOrchestrator:
         self.discovery = discovery or PaperDiscovery()
         self.downloader = downloader or PDFDownloader(output_dir=pdf_dir)
         self.extractor = extractor or GROBIDExtractor()
-        self.chunker = chunker or HybridChunker()
+        self.chunker = chunker or SectionChunker()
         self.embedder = embedder or BGEEmbedder()
         self.storage = storage or QdrantStorage()
         self.state = state or PipelineState()
