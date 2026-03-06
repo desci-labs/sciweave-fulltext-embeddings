@@ -15,3 +15,13 @@
   - 100K paper alpha sample target (sorted by citation count desc)
   - `openai/gpt-oss-120b-TEE` as the semantic chunking model
   - Environment variables from ml-sciweave-backend/.env
+
+### Phase 2: Core Pipeline Modules
+- `pipeline/__init__.py` - Shared dataclasses: PaperMetadata, Section, Chunk, DownloadResult
+- `pipeline/discovery.py` - PaperDiscovery class: ES scroll queries with V0 filters (OA, English, 2015+, >10 citations), sorted by cited_by_count desc, 100K limit support. Uses `best_locations[*].pdf_url` then `locations[*].pdf_url` for PDF URLs.
+- `pipeline/downloader.py` - PDFDownloader class: async aiohttp downloads with per-domain rate limiting, concurrency semaphore, retry with exponential backoff, skip-if-exists logic
+- `pipeline/extractor.py` - GROBIDExtractor class: sends PDFs to GROBID, parses TEI XML into structured sections (title, abstract, body sections, references). Section type classification from title keywords.
+- `pipeline/chunker.py` - HybridChunker class: Tier 1 sentence splitting for sections ≤3000 chars, Tier 2 LLM semantic chunking via Chutes API (openai/gpt-oss-120b-TEE) for longer sections. Falls back to sentence split on LLM failure. Tracks chunking stats.
+- `pipeline/embedder.py` - BGEEmbedder class: BAAI/bge-small-en-v1.5 via fastembed, batch embedding, single query embedding
+- `pipeline/storage.py` - QdrantStorage class: collection creation with HNSW config and payload indexes, paper upsert with UUID5 point IDs, paper deletion, collection info
+- `pipeline/state.py` - PipelineState class: SQLite checkpointing with stages (discovered→downloaded→extracted→chunked→embedded), batch operations, run tracking, stats
