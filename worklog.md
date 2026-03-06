@@ -37,3 +37,6 @@
 - `api/models.py` - Pydantic models: SearchRequest (query, limit, year/citation filters, section filters, include_context), SearchResult, SearchResponse, PaperChunksResponse, StatsResponse, HealthResponse
 - `api/search.py` - Search handlers: semantic search with paper-level deduplication (over-fetch 5x, group by paper_id, keep best chunk). Supports year/citation/section filtering. Paper chunks retrieval. Collection stats.
 - `api/main.py` - FastAPI app with endpoints: POST /search, GET /paper/{id}/chunks, GET /stats, GET /health. Runs on port 8506.
+
+### Phase 5: Docker Compose
+- `docker-compose.yml` - GROBID (lfoppiano/grobid:0.8.1 on port 8070, 8GB memory) + Qdrant (v1.12.6 on ports 6333/6334, persistent volume, 4GB memory)
