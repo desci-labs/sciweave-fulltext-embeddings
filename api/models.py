@@ -10,8 +10,6 @@ class SearchRequest(BaseModel):
     year_max: int | None = Field(None, description="Maximum publication year")
     min_citations: int | None = Field(None, description="Minimum citation count")
     sections: list[str] | None = Field(None, description="Filter by section types (e.g. ['results', 'methods'])")
-    include_context: bool = Field(False, description="Include multiple chunks per paper")
-    max_chunks_per_paper: int = Field(3, ge=1, le=10, description="Max chunks per paper when include_context=True")
 
 
 class SearchResult(BaseModel):
@@ -43,7 +41,7 @@ class PaperChunksResponse(BaseModel):
 
 class StatsResponse(BaseModel):
     points_count: int
-    vectors_count: int
+    vectors_count: int | None = None
     status: str
 
 

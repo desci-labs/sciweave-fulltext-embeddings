@@ -62,3 +62,18 @@
   - Fulltext vs Abstract: fulltext wins 11/12 queries (1.0 vs 0.083 recall)
   - Intrinsic: intra-paper sim=0.753, inter-paper sim=0.678, separation ratio=1.11 (low but expected with 4 similar CS papers)
 - Saved plan to `.claude-plans/embedding-evaluation.md`
+
+### Code Audit & Cleanup
+- **BUG FIX**: `year` field now cast to `int` in `discovery.py` (was passing raw ES value, breaking Qdrant INTEGER index filters)
+- **BUG FIX**: Deprecated `asyncio.get_event_loop()` → `asyncio.get_running_loop()` in `downloader.py`
+- **BUG FIX**: Section filter in `api/search.py` — was nesting `Filter` inside `must` conditions list. Now properly uses `Filter(must=..., should=...)`.
+- **BUG FIX**: Added `is_processed()` skip guard in orchestrator — prevents re-processing already-embedded papers on retry runs
+- **BUG FIX**: `state.close()` now called in orchestrator's `finally` block
+- **BUG FIX**: `vectors_count` in `StatsResponse` now `Optional` (deprecated in newer Qdrant)
+- **REMOVED**: Unimplemented `include_context`/`max_chunks_per_paper` from search API (accepted but never used)
+- **REMOVED**: Unused imports: `hashlib`, `os` (downloader), `shutil`, `Path` (orchestrator), `Optional` (embedder), `field` (evaluate_embeddings)
+- **REMOVED**: Dead `--embedding-device` CLI arg (never passed to BGEEmbedder)
+- **REMOVED**: Unused dependencies: `openai`, `tqdm`, `pyyaml` from requirements.txt
+- **FIXED**: Stale `config/default.yaml` — removed references to deleted HybridChunker params
+- **FIXED**: Docker Compose volume path now uses `${QDRANT_DATA_DIR:-./data/qdrant}` (portable)
+- **ADDED**: `README.md` with quick start, architecture, CLI reference, configuration docs

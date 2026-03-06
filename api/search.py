@@ -67,12 +67,7 @@ def search_fulltext(request: SearchRequest) -> SearchResponse:
     )
 
     # Deduplicate by paper
-    deduplicated = _deduplicate_by_paper(
-        results,
-        max_results=request.limit,
-        include_context=request.include_context,
-        max_chunks_per_paper=request.max_chunks_per_paper,
-    )
+    deduplicated = _deduplicate_by_paper(results, max_results=request.limit)
 
     return SearchResponse(
         results=deduplicated,
@@ -134,30 +129,29 @@ def _build_filters(request: SearchRequest) -> Filter | None:
         conditions.append(
             FieldCondition(key="citation_count", range=Range(gte=request.min_citations))
         )
+    section_should = None
     if request.sections:
-        # Match any of the specified sections
-        should = [
+        section_should = [
             FieldCondition(key="section_type", match=MatchValue(value=s))
             for s in request.sections
         ]
-        conditions.append(Filter(should=should))
 
-    if not conditions:
+    if not conditions and not section_should:
         return None
 
-    return Filter(must=conditions)
+    return Filter(
+        must=conditions or None,
+        should=section_should,
+    )
 
 
 def _deduplicate_by_paper(
     results,
     max_results: int,
-    include_context: bool = False,
-    max_chunks_per_paper: int = 3,
 ) -> list[SearchResult]:
     """Deduplicate search results at the paper level.
 
     Groups by paper_id, keeps the highest-scoring chunk per paper.
-    If include_context=True, returns up to max_chunks_per_paper per paper.
     """
     paper_groups: dict[str, list] = defaultdict(list)
 

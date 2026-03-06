@@ -1,9 +1,7 @@
 """Async PDF downloader with per-domain rate limiting."""
 
 import asyncio
-import hashlib
 import logging
-import os
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -135,9 +133,9 @@ class PDFDownloader:
             self._domain_locks[domain] = asyncio.Lock()
 
         async with self._domain_locks[domain]:
-            now = asyncio.get_event_loop().time()
+            now = asyncio.get_running_loop().time()
             last = self._domain_last_request.get(domain, 0)
             wait = self.rate_limit_per_domain - (now - last)
             if wait > 0:
                 await asyncio.sleep(wait)
-            self._domain_last_request[domain] = asyncio.get_event_loop().time()
+            self._domain_last_request[domain] = asyncio.get_running_loop().time()

@@ -3,9 +3,7 @@
 import asyncio
 import logging
 import os
-import shutil
 from dataclasses import asdict
-from pathlib import Path
 
 from pipeline import PaperMetadata
 from pipeline.chunker import SectionChunker
@@ -67,6 +65,11 @@ class PipelineOrchestrator:
             logger.info(f"Estimated {estimated} papers matching criteria, targeting {target}")
 
             for batch in self.discovery.iterate_batches(query=query, max_papers=max_papers):
+                # Skip already-processed papers
+                batch = [p for p in batch if not self.state.is_processed(p.work_id)]
+                if not batch:
+                    continue
+
                 # Register discovered papers
                 self.state.batch_mark_discovered([
                     (p.work_id, asdict(p)) for p in batch
@@ -115,6 +118,7 @@ class PipelineOrchestrator:
             stats = self.state.get_stats()
             logger.info(f"Pipeline complete. Stats: {stats}")
             logger.info(f"Chunker final stats: {self.chunker.stats}")
+            self.state.close()
 
     def _process_paper(self, paper: PaperMetadata, pdf_path: str):
         """Process a single paper: extract → chunk → embed → store."""

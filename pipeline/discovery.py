@@ -156,7 +156,7 @@ class PaperDiscovery:
             doi=doi or None,
             title=source.get("title", ""),
             authors=authors,
-            year=source.get("publication_year"),
+            year=int(source["publication_year"]) if source.get("publication_year") is not None else None,
             citation_count=source.get("cited_by_count", 0),
             pdf_url=pdf_url,
             journal=journal,

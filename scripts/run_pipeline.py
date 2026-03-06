@@ -55,12 +55,6 @@ def main():
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         help="Logging level"
     )
-    parser.add_argument(
-        "--embedding-device", type=str, default="cpu",
-        choices=["cpu", "cuda"],
-        help="Device for embedding model"
-    )
-
     args = parser.parse_args()
 
     # Configure logging

@@ -18,19 +18,13 @@ downloader:
 extractor:
   grobid_url: "${GROBID_URL}"
   timeout: 60
-  max_concurrent: 5
 
 chunker:
   max_chunk_size: 1000
-  max_section_chars: 3000
-  semantic_model: "${CHUTES_FAST_MODEL}"
-  chutes_api_key: "${CHUTES_API_KEY}"
-  overlap: 0
 
 embedder:
   model_name: "BAAI/bge-small-en-v1.5"
   batch_size: 256
-  device: "cpu"
 
 storage:
   qdrant_url: "${QDRANT_URL}"

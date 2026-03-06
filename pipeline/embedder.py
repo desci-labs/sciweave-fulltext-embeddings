@@ -1,7 +1,6 @@
 """Generate embeddings using BAAI/bge-small-en-v1.5 via fastembed."""
 
 import logging
-from typing import Optional
 
 import numpy as np
 from fastembed import TextEmbedding
