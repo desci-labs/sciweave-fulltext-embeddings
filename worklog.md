@@ -31,3 +31,9 @@
 - `scripts/run_pipeline.py` - CLI entry point with args: `--max-papers` (default 100K), `--batch-size`, `--pdf-dir`, `--state-db`, `--resume`, `--no-cleanup`, `--log-level`, `--embedding-device`
 - `scripts/check_progress.py` - Print pipeline progress stats from SQLite
 - Added `python-dotenv` to requirements.txt
+
+### Phase 4: Search API
+- `api/__init__.py` - Empty init
+- `api/models.py` - Pydantic models: SearchRequest (query, limit, year/citation filters, section filters, include_context), SearchResult, SearchResponse, PaperChunksResponse, StatsResponse, HealthResponse
+- `api/search.py` - Search handlers: semantic search with paper-level deduplication (over-fetch 5x, group by paper_id, keep best chunk). Supports year/citation/section filtering. Paper chunks retrieval. Collection stats.
+- `api/main.py` - FastAPI app with endpoints: POST /search, GET /paper/{id}/chunks, GET /stats, GET /health. Runs on port 8506.
